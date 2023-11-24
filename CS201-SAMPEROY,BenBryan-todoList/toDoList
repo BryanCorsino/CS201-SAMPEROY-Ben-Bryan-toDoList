@@ -1,0 +1,72 @@
+// Create an empty array to store tasks to be done
+const todoStack = [];
+
+// Create an empty array to store tasks that can be redone
+const redoQueue = [];
+
+// Define a function to add a task to the todoStack
+function addTask() {
+  // Get the input element with the id 'taskInput'
+  const taskInput = document.getElementById('taskInput');
+  // Get the trimmed value from the input element
+  const task = taskInput.value.trim();
+
+  // Check if the task is not an empty string
+  if (task !== '') {
+    // Push the task to the todoStack array
+    todoStack.push(task);
+    // Clear the input field
+    taskInput.value = '';
+    // Update the todo list display
+    updateTodoList();
+  }
+}
+
+// Define a function to undo the last task
+function undo() {
+  // Check if there are tasks in the todoStack
+  if (todoStack.length > 0) {
+    // Pop the last task from the todoStack
+    const undoneTask = todoStack.pop();
+    // Push the undone task to the redoQueue
+    redoQueue.push(undoneTask);
+    // Update the todo list display
+    updateTodoList();
+  }
+}
+
+// Define a function to redo the last undone task
+function redo() {
+  // Check if there are tasks in the redoQueue
+  if (redoQueue.length > 0) {
+    // Shift the first task from the redoQueue
+    const redoneTask = redoQueue.shift();
+    // Push the redone task back to the todoStack
+    todoStack.push(redoneTask);
+    // Update the todo list display
+    updateTodoList();
+  }
+}
+
+// Define a function to update the todo list display
+function updateTodoList() {
+  // Get the container element with the id 'todoList'
+  const todoListContainer = document.getElementById('todoList');
+  // Clear the inner HTML of the container
+  todoListContainer.innerHTML = '';
+
+  // Iterate through each task in the todoStack
+  todoStack.forEach((task, index) => {
+    // Create a div element for the task
+    const taskItem = document.createElement('div');
+    // Set the class name of the div element
+    taskItem.className = 'task-item';
+    // Set the text content of the div element
+    taskItem.textContent = `${index + 1}. ${task}`;
+    // Append the div element to the todoListContainer
+    todoListContainer.appendChild(taskItem);
+  });
+}
+
+// Initial update of the todo list display
+updateTodoList();
